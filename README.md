@@ -1,56 +1,51 @@
 # **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
-
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
-
-Overview
----
-
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
-
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+**Finding Lane Lines on the Road**
 
-1. Describe the pipeline
+### Reflection
 
-2. Identify any shortcomings
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-3. Suggest possible improvements
+My pipeline consisted of 5 steps. 
 
-We encourage using images in your writeup to demonstrate how your pipeline works.  
+1- convert colored image to gray scare. This conversion will convert our 3 channel image to one channel image.
 
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
+2- Apply gaussian blure. This step will help reduce the noise in the image and smooth out the image to reduce the false edge detaction.
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
+3- Apply canny edge detection. This step will extract the edges from the gray image(sudden changes in color).
+
+4- Extract region of intreast. This step will remove the part of the image which will have a low probability of having the line we are intrested in locating
+
+5- Apply hough lines to detect possible lines. 
+
+6- Draw line. In this step the the lines that are found from hough line are seperated to left and right line, 
+extrapolate to get a single line and drawn on the image.
+
+In order to draw a single line on the left and right lanes, I modified the draw_lines() adding the connect_lines. This function will first calculate the slope of the line for each of the lines fround by lough line.
+Base on the slope of the line the points are assigned to left of right line. If the slope of the is not between plus minus 30-43 is rejected. After the lines are idendified a single slope and point on the line is calculated. The slope and the point is then used to calculate the beginnign and end point of a line.
+   
+
+Sample output:
 
 
-The Project
----
+![alt text![]](test_images_output/solidYellowLeft.jpg)[sample output 1]
+![alt text![]](test_images_output/solidWhiteRight.jpg)[sample output 2]
+![alt text![]](test_images_output/solidYellowCurve.jpg)[sample output 3]
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+### 2. Identify potential shortcomings with your current pipeline
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+This is a very basic lane detection algorithm which has a lot of short coming including:
 
-**Step 2:** Open the code in a Jupyter Notebook
+1- Lake of robustness to change of lighting
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
+2- Not being able to correctly detect curved roads
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+3- detecting line in just a limited area of the image
 
-`> jupyter notebook`
+4- detecting only single line
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+### 3. Suggest possible improvements to your pipeline
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+1- Use of color thresholding to improve the lane detection
 
