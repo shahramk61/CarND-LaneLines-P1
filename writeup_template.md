@@ -1,47 +1,51 @@
 # **Finding Lane Lines on the Road** 
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
----
 
 **Finding Lane Lines on the Road**
-
-The goals / steps of this project are the following:
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
-
-
-[//]: # (Image References)
-
-[image1]: ./examples/grayscale.jpg "Grayscale"
-
----
 
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+My pipeline consisted of 5 steps. 
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
+1- convert colored image to gray scare. This conversion will convert our 3 channel image to one channel image.
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+2- Apply gaussian blure. This step will help reduce the noise in the image and smooth out the image to reduce the false edge detaction.
 
-![alt text][image1]
+3- Apply canny edge detection. This step will extract the edges from the gray image(sudden changes in color).
 
+4- Extract region of intreast. This step will remove the part of the image which will have a low probability of having the line we are intrested in locating
+
+5- Apply hough lines to detect possible lines. 
+
+6- Draw line. In this step the the lines that are found from hough line are seperated to left and right line, 
+extrapolate to get a single line and drawn on the image.
+
+In order to draw a single line on the left and right lanes, I modified the draw_lines() adding the connect_lines. This function will first calculate the slope of the line for each of the lines fround by lough line.
+Base on the slope of the line the points are assigned to left of right line. If the slope of the is not between plus minus 30-43 is rejected. After the lines are idendified a single slope and point on the line is calculated. The slope and the point is then used to calculate the beginnign and end point of a line.
+   
+
+Sample output:
+
+
+![alt text![]](test_images_output/solidWhiteCurve.jpg)[sample output 1]
+![alt text![]](test_images_output/solidWhiteRight.jpg)[sample output 2]
+![alt text![]](test_images_output/solidYellowCurve.jpg)[sample output 3]
 
 ### 2. Identify potential shortcomings with your current pipeline
 
+This is a very basic lane detection algorithm which has a lot of short coming including:
 
-One potential shortcoming would be what would happen when ... 
+1- Lake of robustness to change of lighting
 
-Another shortcoming could be ...
+2- Not being able to correctly detect curved roads
 
+3- detecting line in just a limited area of the image
+
+4- detecting only single line
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
+1- Use of color thresholding to improve the lane detection
 
-Another potential improvement could be to ...
