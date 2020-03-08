@@ -29,6 +29,7 @@ Base on the slope of the line the points are assigned to left of right line. If 
 Sample output:
 
 
+
 ![alt text![]](test_images_output/solidYellowLeft.jpg)[sample output 1]
 ![alt text![]](test_images_output/solidWhiteRight.jpg)[sample output 2]
 ![alt text![]](test_images_output/solidYellowCurve.jpg)[sample output 3]
